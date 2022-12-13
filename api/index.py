@@ -9,12 +9,14 @@ def home():
     return 'Hello, World!'
 
 
-@app.route('/dispatch_github')
+@app.route('/dispatch_github', methods=['GET', 'POST'])
 def dispatch_github():
     token = request.args.get('token')
     user = request.args.get('user')
     repo = request.args.get('repo')
     event_type = request.args.get('event_type')
+    if token is None or user is None or repo is None or event_type is None:
+        return "参数异常"
     requests_path = 'https://api.github.com/repos/' + user + '/' + repo + '/dispatches'
     token = 'token ' + token
     r = requests.post(requests_path,
